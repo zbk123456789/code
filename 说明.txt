@@ -1,0 +1,36 @@
+
+换包：
+1、替换services.jar、sevices.odex  存放路径：/system/framework
+2、替换app：launch、systemui、wecarcontrol、music、wecarspeech
+
+
+以下命令查进程：
+logcat -v threadtime -b events|grep am_proc_start
+
+
+测试的4个点：
+
+  一 开机禁用WIDGET后, 另外有三个地方要启用WIDGET(梧桐应用负责)  
+  1. 苏迪: 语音可用后,设置wt_start_widget
+  Settings.System.putInt(mContext.getContentResolver(), "wt_start_widget",1)；  
+    
+  2. 赵宇: 用户从桌面点音乐/地图等有分屏的应用 ,设置wt_start_widget
+  Settings.System.putInt(mContext.getContentResolver(), "wt_start_widget",1)；  
+    
+  3. 吴小庆: 从DOCK栏直接切换到音乐/地图, 设置wt_start_widget
+  Settings.System.putInt(mContext.getContentResolver(), "wt_start_widget",1)；  
+    
+  二 ROM开机禁用WIDGET, 然后可启动WIDGET(好帮手负责)  
+  何小波: ROM在刚开机时要清除上面标志并禁用WIDGET, 然后检测到有上面标志为1时,启用WIDGET  
+
+
+确认settings的值有无设置：
+settings get system wt_start_widget
+
+sm6150_au:/ # settings get system screen_brightness                                                                                                                                                               
+102
+sm6150_au:/ # 
+sm6150_au:/ # settings get system wt_start_widget
+null
+
+
